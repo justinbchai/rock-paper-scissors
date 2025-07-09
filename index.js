@@ -17,12 +17,19 @@ function getHumanChoice() {
 }
 
 function playGame() {
+    const SCORE_TO_WIN = 5;
+    const scorecard = document.querySelector('.scorecard');
+    const feed = document.querySelector('.feed')
+
+    let humanScore = 0;
+    let computerScore = 0;
+
     function playRound(humanChoice, computerChoice) {
         if (humanChoice === computerChoice) {
 
             // tie
             feed.append(`Tie! You both picked ${humanChoice}.`, document.createElement('br'));
-        
+
         } else if (humanChoice === 'Rock' && computerChoice === 'Paper' ||
             humanChoice === 'Paper' && computerChoice === 'Scissors' ||
             humanChoice === 'Scissors' && computerChoice === 'Rock') {
@@ -42,25 +49,37 @@ function playGame() {
         } else {
             feed.append('Oops, something went wrong!!', document.createElement('br'));
         }
+
+        scorecard.textContent = `Human score: ${humanScore} Computer score: ${computerScore}`
+        
+        if(humanScore === SCORE_TO_WIN) {
+            alert('You Win!\nHuman: ' + humanScore + '\nComputer: ' + computerScore);
+            humanScore = 0;
+            computerScore = 0;
+            scorecard.replaceChildren();
+            feed.replaceChildren();
+        } else if(computerScore === SCORE_TO_WIN) {
+            alert('You Lose!\nHuman: ' + humanScore + '\nComputer: ' + computerScore);
+            humanScore = 0;
+            computerScore = 0;
+            scorecard.replaceChildren();
+            feed.replaceChildren();
+        }
     }
 
-    const scorecard = document.querySelector('.scorecard');
-    const feed = document.querySelector('.feed')
-
-    let humanScore = 0;
-    let computerScore = 0;
+    
 
     scorecard.textContent = `Human score: ${humanScore} Computer score: ${computerScore}`
 
     const buttons = document.querySelectorAll('button');
     buttons.forEach((button) => {
-        button.addEventListener('click', () =>{
+        button.addEventListener('click', () => {
             playRound(button.textContent, getComputerChoice());
             scorecard.textContent = `Human score: ${humanScore} Computer score: ${computerScore}`
         });
     });
 
-    
+
 }
 
 addEventListener('load', playGame);
