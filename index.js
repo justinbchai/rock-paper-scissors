@@ -18,34 +18,49 @@ function getHumanChoice() {
 
 function playGame() {
     function playRound(humanChoice, computerChoice) {
-
         if (humanChoice === computerChoice) {
+
             // tie
-            console.log(`Tie! You both picked ${humanChoice}.`)
-        } else if (humanChoice === 'Rock' && computerChoice === 'Paper' || humanChoice === 'Paper' && computerChoice === 'Scissors' || humanChoice === 'Scissors' && computerChoice === 'Rock') {
+            feed.append(`Tie! You both picked ${humanChoice}.`, document.createElement('br'));
+        
+        } else if (humanChoice === 'Rock' && computerChoice === 'Paper' ||
+            humanChoice === 'Paper' && computerChoice === 'Scissors' ||
+            humanChoice === 'Scissors' && computerChoice === 'Rock') {
+
             // human lost
             computerScore++;
-            console.log(`You lost! ${computerChoice} beats ${humanChoice}.`);
-        } else if (computerChoice === 'Rock' && humanChoice === 'Paper' || computerChoice === 'Paper' && humanChoice === 'Scissors' || computerChoice === 'Scissors' && humanChoice === 'Rock') {
+            feed.append(`You lost! ${computerChoice} beats ${humanChoice}.`, document.createElement('br'));
+
+        } else if (computerChoice === 'Rock' && humanChoice === 'Paper' ||
+            computerChoice === 'Paper' && humanChoice === 'Scissors' ||
+            computerChoice === 'Scissors' && humanChoice === 'Rock') {
+
             // human won
             humanScore++;
-            console.log(`You won! ${humanChoice} beats ${computerChoice}.`);
+            feed.append(`You won! ${humanChoice} beats ${computerChoice}.`, document.createElement('br'));
+
         } else {
-            console.log('Oops, something went wrong!!')
+            feed.append('Oops, something went wrong!!', document.createElement('br'));
         }
     }
 
-    const NUMBER_OF_ROUNDS = 5;
+    const scorecard = document.querySelector('.scorecard');
+    const feed = document.querySelector('.feed')
 
     let humanScore = 0;
     let computerScore = 0;
 
-    for (let i = 0; i < NUMBER_OF_ROUNDS; i++) {
-        playRound(getHumanChoice(), getComputerChoice());
-    }
+    scorecard.textContent = `Human score: ${humanScore} Computer score: ${computerScore}`
 
-    console.log(`Human score: ${humanScore}`)
-    console.log(`Computer score: ${computerScore}`)
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () =>{
+            playRound(button.textContent, getComputerChoice());
+            scorecard.textContent = `Human score: ${humanScore} Computer score: ${computerScore}`
+        });
+    });
+
+    
 }
 
-
+addEventListener('load', playGame);
